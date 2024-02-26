@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34316.72
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FloorAndEntrance", "FloorAndEntrance\FloorAndEntrance.csproj", "{057892D3-D181-4CED-9C3E-4260E900A15C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{057892D3-D181-4CED-9C3E-4260E900A15C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{057892D3-D181-4CED-9C3E-4260E900A15C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{057892D3-D181-4CED-9C3E-4260E900A15C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{057892D3-D181-4CED-9C3E-4260E900A15C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {18329ACF-A971-469F-9B2C-2858345E176F}
+	EndGlobalSection
+EndGlobal

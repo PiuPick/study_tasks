@@ -4,52 +4,60 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter the size of the kaleidoscope (half square)\nsize = ");
+            Console.Write("Enter the size of the kaleidoscope (half square)\nsize = ");
             int size = Convert.ToInt32(Console.ReadLine());
 
-            if (size < 3 || size > 20) { Console.WriteLine("Error: size >20 or <3"); return; }
+            if (size < 3 || size > 20) { Console.WriteLine("Error: your 3 < size > 20"); return; }
 
             Kaleidoscope(size);
         }
 
-        static int[] colors = { 0, 8, 7, 15, 14, 6, 12, 4, 5, 13, 11, 3, 9, 1, 2, 10 };
+        private static int[] colors = { 0, 8, 7, 15, 14, 6, 12, 4, 5, 13, 11, 3, 9, 1, 2, 10 };
+
         static void Kaleidoscope(int size)
         {
-            // создаем четверть всей картинки (пусть это будет левый верхний квадрат)
-            int[,] color_square = new int[size, size];
+            // создаем квадрат общей картины, который включает в себя 4 четвертинки
+            int[,] color_square = new int[size * 2, size * 2];
+
+            int temp = size * 2 - 1; // вспомогательная переменная для заполнения массива 
             Random rnd = new Random();
 
-            // запоняем массив рандомными значениями из диапазона цветов ConsoleColor
+            // заполнение и проверка массива рандомными значениями из диапазона цветов ConsoleColor
             for (int i = 0; i < size; i++)
             {
-                for (int j = i + 1; j < size; j++)
+                for (int j = i; j < size; j++)
                 {
-                    // главная диагональ
-                    if (i == j) { color_square[i, i] = colors[rnd.Next(3, 20)]; continue; }
+                    // задаем цвет одному пикселю
+                    color_square[i, j] = colors[rnd.Next(16)];
 
-                    // симметрия по диагонали
-                    color_square[i, j] = colors[rnd.Next(3, 20)];
-                    color_square[j, i] = color_square[i, j];
-
-                    // проверка на соседние повторяющиеся цвета
-                    if ((i > 0 && color_square[i, j] == color_square[i - 1, j]) ||
-                        (j > 0 && color_square[i, j] == color_square[i, j - 1]))
+                    // проверка на совпадение левого и верхнего пикселя от текущего
+                    while ((i > 0 && (color_square[i, j] == color_square[i - 1, j])) ||
+                           (j > 0 && (color_square[i, j] == color_square[i, j - 1])) )
                     {
-                        while (color_square[i, j] == color_square[i - 1, j] ||
-                              color_square[i, j] == color_square[i, j - 1])
-                            color_square[i, j] = colors[rnd.Next(3, 20)];
+                        color_square[i, j] = colors[rnd.Next(16)];
                     }
+
+                    // симметричная отрисовка четвертинки относительно её диагонали:
+                    color_square[j, i] =                                                    // верхней левой
+                    color_square[i, temp - j] = color_square[j, temp - i] =                 // верхней правой
+                    color_square[temp - i, j] = color_square[temp - j, i] =                 // нижней левой
+                    color_square[temp - i, temp - j] = color_square[temp - j, temp - i] =   // нижней правой
+                        color_square[i, j]; // присвоили к одному проверенному цвету все остальные
                 }
             }
 
-            // отзеркалить матрицу
-            // 1) по вертикали
-            // 2) по горизонтали
-            // 3) 1. по горизонтали
-
-            // соединить все 4 кусочка матрицы в одну
-
-            // вывести на экран
+            // отрисовываем калейдоскоп
+            ++temp; // увеличиваем значение до полного размера калейдоскопа
+            for (int i = 0; i < temp; i++)
+            {
+                for (int j = 0; j < temp; j++)
+                {
+                    Console.BackgroundColor = (ConsoleColor)color_square[i, j];
+                    Console.Write(' ');
+                }
+                Console.WriteLine();
+            }
+            Console.ResetColor();
         }
     }
 }

@@ -1,74 +1,59 @@
-﻿namespace NLetterWords
+﻿using System;
+
+namespace NLetterWords
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            //Console.WriteLine("Enter the length of the word N\nN = ");
-            //int N_num= Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Enter the length of the word N\nN = ");
+            int N_num = Convert.ToInt32(Console.ReadLine());
 
-            //Console.WriteLine("Enter the length of the alphabet used for the word M\nM = ");
-            //int M_num = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Enter the length of the alphabet used for the word M\nM = ");
+            int M_num = Convert.ToInt32(Console.ReadLine());
 
-            NLetterWords(4, 3);
+            string[] res = NLetterWords(N_num, M_num);
 
-            Console.WriteLine();
-
-            //NLetterWords_recursion(N_num, M_num);
+            for (int i = 0; i < res.Length; i++)
+                Console.WriteLine(res[i]);
         }
 
         const string alphabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
 
-        static void NLetterWords(int N_num, int M_num)
+        static string[] NLetterWords(int N_num, int M_num)
         {
-            string mini_alphabet = alphabet[..M_num]; // записали алфавит из M_num букв русского алфавита
-            int count_placements = (int)Math.Pow(M_num, N_num); // число размещений с повторениями
+            string mini_alphabet = alphabet[..M_num];               // записали мини алфавит из M_num букв русского алфавита
 
-            int[,] result = new int[count_placements, N_num];
+            int count_placements = (int)Math.Pow(M_num, N_num);     // нашли число размещений с повторениями (количество слов)
+            int[,] words_in_num = new int[count_placements, N_num]; // создаем таблицу слов, которая будет содержать числа ячеек мини алфавита
 
-            int temp = 0;
-
-            for (int i = 1; i < count_placements; i++) // проходимся по каждому слову
+            for (int k = 1; k < count_placements; k++)              // проходимся по каждому слову
             {
-                result[i - 1, 0] = temp++;
+                for (int n = 0; n < N_num; n++)                     // проходимся по каждому предыдущему символу слова, чтобы его скопировать в новое
+                    words_in_num[k, n] = words_in_num[k - 1, n];
 
-                for (int j = 1; j < N_num; j++) // проходимся по каждому символу (начиная со 2 по счету)
+                if (words_in_num[k, 0] + 1 < M_num) ++words_in_num[k, 0]; // увеличиваем значение первой ячейки
+                else // если она равна M_num, тогда обнуляем её и прибавляем единицу следующему элементу слова
                 {
-                    result[i, j] = result[i - 1, j]; // копируем предыдущее слово
-                }
+                    words_in_num[k, 0] = 0;
 
-                if (temp == M_num)
-                {
-                    temp = 0;
-                    int help = 1;
-
-                    while (help + 1 < N_num)
+                    for (int t = 1; t < N_num; t++) // проходимся по оставшимся элементам слова
                     {
-                        if (++result[i, help] == M_num)
-                        {
-                            result[i, help] = 0;
-                            ++result[i, ++help];
-                        }
-                        else break;
+                        // если предыдущий элемент равен нулю и текущий при увелечении равен M_num, то обнуляем элемент и повторяем снова
+                        if (words_in_num[k, t - 1] == 0 && ++words_in_num[k, t] == M_num) words_in_num[k, t] = 0; 
+                        else break; // в противном случае заканчиваем с увеличениями
                     }
                 }
             }
 
+            string[] result = new string[count_placements]; // результирующий массив строк
 
+            // преобразовываем наш числовой массив слов
             for (int i = 0; i < count_placements; i++)
-            {
                 for (int j = 0; j < N_num; j++)
-                {
-                    Console.Write(result[i, j] + " ");
-                }
-                Console.WriteLine();
-            }
+                    result[i] += mini_alphabet[words_in_num[i, j]];
 
-            // Console.WriteLine(result);
-        }
-        static void NLetterWords_recursion(int N_num, int M_num)
-        {
-
+            return result;
         }
     }
 }

@@ -12,15 +12,25 @@ namespace NLetterWords
             Console.WriteLine("Enter the length of the alphabet used for the word M\nM = ");
             int M_num = Convert.ToInt32(Console.ReadLine());
 
-            string[] res = NLetterWords(N_num, M_num);
-
-            for (int i = 0; i < res.Length; i++)
-                Console.WriteLine(res[i]);
+            //NLetterWords(3, 3);
+            //NLetterWords_recursive(3, 3);
         }
 
         const string alphabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
 
-        static string[] NLetterWords(int N_num, int M_num)
+        static void NLetterWords_recursive(int N_num, int M_num, string word = "")
+        {
+            if (word.Length == N_num) // если слово сформировалось, то выводим
+            {
+                Console.WriteLine(word);
+                return;
+            }
+
+            // с конца будут изменяться значения (ААА, ААБ, ААВ и тд)
+            for (int i = 0; i < M_num; i++) NLetterWords_recursive(N_num, M_num, word + alphabet[i]);
+        }
+
+        static void NLetterWords(int N_num, int M_num)
         {
             string mini_alphabet = alphabet[..M_num];               // записали мини алфавит из M_num букв русского алфавита
 
@@ -46,14 +56,15 @@ namespace NLetterWords
                 }
             }
 
-            string[] result = new string[count_placements]; // результирующий массив строк
-
-            // преобразовываем наш числовой массив слов
+            // выводим
             for (int i = 0; i < count_placements; i++)
+            {
                 for (int j = 0; j < N_num; j++)
-                    result[i] += mini_alphabet[words_in_num[i, j]];
-
-            return result;
+                {
+                    Console.Write(mini_alphabet[words_in_num[i, j]]);
+                }
+                Console.WriteLine();
+            }
         }
     }
 }
